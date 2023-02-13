@@ -14,7 +14,6 @@ import { OrderContext } from '../../contexts/CoffeeUserOrderContext/CoffeeUserOr
 export function Header() {
   const orderContext = useContext(OrderContext)
   const { coffeeItens } = orderContext
-
   return (
     <HeaderContainer>
       <Link to="/" title="home">
