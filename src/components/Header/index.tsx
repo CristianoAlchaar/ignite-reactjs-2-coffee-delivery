@@ -8,12 +8,22 @@ import {
 import logoCoffeeDelivery from '../../assets/CoffeeDeliveryLogo.svg'
 import { ShoppingCartSimple, MapPin } from 'phosphor-react'
 import { Link, NavLink } from 'react-router-dom'
-import { useContext } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { OrderContext } from '../../contexts/CoffeeUserOrderContext/CoffeeUserOrderContext'
+import { getUserAdress } from '../Geolocator'
 
 export function Header() {
   const orderContext = useContext(OrderContext)
   const { coffeeItens } = orderContext
+
+  const [userAdressData, setUserAdressData] = useState({})
+  const userAdressPromise = getUserAdress()
+  useEffect(() => {
+    userAdressPromise.then((userAdress) => {
+      setUserAdressData(userAdress)
+    })
+  }, [])
+
   return (
     <HeaderContainer>
       <Link to="/" title="home">

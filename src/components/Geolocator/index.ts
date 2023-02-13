@@ -1,5 +1,5 @@
 import { useGeolocated } from 'react-geolocated'
-import { axios } from 'axios'
+import axios from 'axios'
 
 interface geolocationData {
   latitude: number
@@ -9,13 +9,15 @@ interface geolocationData {
 const API_KEY = 'a5892da8fbec4d9c8ce4d009bb389a87'
 
 function getUserGeolocation() {
-  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
-    useGeolocated({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      userDecisionTimeout: 5000,
-    })
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const geolocation = useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: true,
+    },
+    userDecisionTimeout: 5000,
+  })
+
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } = geolocation
 
   if (!isGeolocationAvailable) {
     console.log('Geolocation is not available')
@@ -26,16 +28,12 @@ function getUserGeolocation() {
       latitude: coords.latitude,
       longitude: coords.longitude,
     }
-    console.log(userGeoLocation)
     return userGeoLocation
   }
 }
 
-function translateLatLongToAdress(latLong: geolocationData) {
-  console.log(latLong)
-  console.log('Longitude ' + latLong.longitude)
-  console.log('Latitude ' + latLong.latitude)
-  /* axios
+async function translateLatLongToAdress(latLong: geolocationData) {
+  const data = await axios
     .get(
       'https://api.geoapify.com/v1/geocode/reverse?lat=' +
         latLong.latitude +
@@ -45,17 +43,20 @@ function translateLatLongToAdress(latLong: geolocationData) {
         API_KEY,
     )
     .then((response: any) => {
-      console.log(response.data)
+      return response.data
     })
     .catch((error: any) => {
       console.log(error)
-    }) */
+    })
+  return data
 }
 
 export async function getUserAdress() {
-  const userLatLong = getUserGeolocation()
+  const userLatLong = await getUserGeolocation()
+  let userAdressData
   if (userLatLong !== undefined) {
     const userAdress = await translateLatLongToAdress(userLatLong)
-    console.log(userAdress)
+    userAdressData = userAdress.features[0].properties
   }
+  return userAdressData
 }
