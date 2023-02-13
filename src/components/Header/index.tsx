@@ -8,7 +8,6 @@ import {
 import logoCoffeeDelivery from '../../assets/CoffeeDeliveryLogo.svg'
 import { ShoppingCartSimple, MapPin } from 'phosphor-react'
 import { Link, NavLink } from 'react-router-dom'
-import { getUserAdress } from '../Geolocator' // someday i will make it work
 import { useContext } from 'react'
 import { OrderContext } from '../../contexts/CoffeeUserOrderContext/CoffeeUserOrderContext'
 
@@ -26,7 +25,7 @@ export function Header() {
           Valença, PT
         </LocationContainer>
         <NavLink
-          to="/checkout"
+          to={coffeeItens.length > 0 ? 'checkout' : 'empty'}
           title="checkout"
           style={{
             textDecoration: 'none',

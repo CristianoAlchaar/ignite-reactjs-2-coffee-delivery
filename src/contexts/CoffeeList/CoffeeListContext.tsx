@@ -14,7 +14,7 @@ import imgHavaiano from '../../assets/Type=Havaiano.svg'
 import imgIrlandes from '../../assets/Type=Irlandês.svg'
 import imgArabe from '../../assets/Type=Árabe.svg'
 
-export const coffeeTags = {
+const coffeeTags = {
   traditional: 'tradicional',
   cold: 'gelado',
   milky: 'com leite',
@@ -23,7 +23,7 @@ export const coffeeTags = {
 } as const
 
 export interface coffeeItem {
-  id: number // i will preset this id, ideally this would come from a database
+  id: number
   imgPath: string
   title: string
   tags: string[]
