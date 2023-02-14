@@ -39,7 +39,7 @@ export function Header() {
             <ShoppingCartSimple size={24} color="#C47F17" weight="fill" />
           </CheckoutContainer>
           <ListProductsCountContainer>
-            {coffeeItens.length}
+            {coffeeItens.reduce((acc, item) => acc + item.quantity, 0)}
           </ListProductsCountContainer>
         </NavLink>
       </NavContainer>

@@ -1,6 +1,6 @@
 import { useGeolocated } from 'react-geolocated'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface geolocationData {
   latitude: number
@@ -26,7 +26,7 @@ export function Geolocator() {
       userDecisionTimeout: 5000,
     })
 
-  async function getUserAdress() {
+  const getUserAdress = useCallback(async () => {
     if (!isGeolocationAvailable) {
       console.log('Geolocation is not available')
     } else if (!isGeolocationEnabled) {
@@ -41,7 +41,7 @@ export function Geolocator() {
     } else {
       return undefined
     }
-  }
+  }, [isGeolocationAvailable, isGeolocationEnabled, coords])
 
   async function translateLatLongToAdress(latLong: geolocationData) {
     const translated = await axios
@@ -74,11 +74,12 @@ export function Geolocator() {
     )
   }, [getUserAdress])
 
+  console.log(finalUserAdress)
   return (
     <>
       {finalUserAdress.city !== '' && finalUserAdress.country_code !== '' ? (
         <>
-          {finalUserAdress.city}, {finalUserAdress.country_code}
+          {finalUserAdress.city}, {finalUserAdress.country_code.toUpperCase()}
         </>
       ) : (
         <>Bem Vindo</>
