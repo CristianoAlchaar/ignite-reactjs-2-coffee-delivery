@@ -12,11 +12,27 @@ export function orderReducer(
     case ActionTypes.ADD_NEW_COFFEE: {
       const newCofee = action.payload.newCofee
       const newQuantity = action.payload.quantity
-      const newCoffeeItens = [
-        ...state.coffeeItens,
-        { ...newCofee, quantity: newQuantity },
-      ]
-      return { ...state, coffeeItens: newCoffeeItens }
+      const coffeeId = newCofee.id
+      const coffeeExists = state.coffeeItens.some(
+        (coffee) => coffee.id === coffeeId,
+      )
+      if (coffeeExists) {
+        // If coffee already exists, update the quantity instead of adding a new item
+        const newCoffeeItens = state.coffeeItens.map((coffee) => {
+          if (coffee.id === coffeeId) {
+            return { ...coffee, quantity: coffee.quantity + newQuantity }
+          }
+          return coffee
+        })
+        return { ...state, coffeeItens: newCoffeeItens }
+      } else {
+        // If coffee does not exist, add a new item to the list
+        const newCoffeeItens = [
+          ...state.coffeeItens,
+          { ...newCofee, quantity: newQuantity },
+        ]
+        return { ...state, coffeeItens: newCoffeeItens }
+      }
     }
 
     case ActionTypes.ALTER_COFFEE_BY_ID: {

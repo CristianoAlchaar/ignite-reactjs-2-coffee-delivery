@@ -72,9 +72,9 @@ export function Geolocator() {
           country_code: data.country_code,
         }),
     )
+    console.log(finalUserAdress)
   }, [getUserAdress])
 
-  console.log(finalUserAdress)
   return (
     <>
       {finalUserAdress.city !== '' && finalUserAdress.country_code !== '' ? (
