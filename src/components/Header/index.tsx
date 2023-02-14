@@ -10,10 +10,12 @@ import { ShoppingCartSimple, MapPin } from 'phosphor-react'
 import { Link, NavLink } from 'react-router-dom'
 import { useContext } from 'react'
 import { OrderContext } from '../../contexts/CoffeeUserOrderContext/CoffeeUserOrderContext'
+import { Geolocator } from '../Geolocator'
 
 export function Header() {
   const orderContext = useContext(OrderContext)
   const { coffeeItens } = orderContext
+
   return (
     <HeaderContainer>
       <Link to="/" title="home">
@@ -22,7 +24,7 @@ export function Header() {
       <NavContainer>
         <LocationContainer>
           <MapPin size={24} color="#8047F8" weight="fill" />
-          Rio de Janeiro, RJ
+          <Geolocator />
         </LocationContainer>
         <NavLink
           to={coffeeItens.length > 0 ? 'checkout' : 'empty'}

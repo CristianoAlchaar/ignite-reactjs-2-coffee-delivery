@@ -1,14 +1,23 @@
 import { useGeolocated } from 'react-geolocated'
-import { axios } from 'axios'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 interface geolocationData {
   latitude: number
   longitude: number
 }
 
+interface necessaryUserAdressData {
+  city: string
+  country_code: string
+}
+
 const API_KEY = 'a5892da8fbec4d9c8ce4d009bb389a87'
 
-function getUserGeolocation() {
+export function Geolocator() {
+  const [finalUserAdress, setFinalUserAdress] =
+    useState<necessaryUserAdressData>({ city: '', country_code: '' })
+
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
@@ -17,45 +26,63 @@ function getUserGeolocation() {
       userDecisionTimeout: 5000,
     })
 
-  if (!isGeolocationAvailable) {
-    console.log('Geolocation is not available')
-  } else if (!isGeolocationEnabled) {
-    console.log('Geolocation is disabled')
-  } else if (coords) {
-    const userGeoLocation = {
-      latitude: coords.latitude,
-      longitude: coords.longitude,
+  async function getUserAdress() {
+    if (!isGeolocationAvailable) {
+      console.log('Geolocation is not available')
+    } else if (!isGeolocationEnabled) {
+      console.log('Geolocation is disabled')
+    } else if (coords) {
+      const userGeoLocation = {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      }
+      const userAdress = await translateLatLongToAdress(userGeoLocation)
+      return userAdress
+    } else {
+      return undefined
     }
-    console.log(userGeoLocation)
-    return userGeoLocation
   }
-}
 
-function translateLatLongToAdress(latLong: geolocationData) {
-  console.log(latLong)
-  console.log('Longitude ' + latLong.longitude)
-  console.log('Latitude ' + latLong.latitude)
-  /* axios
-    .get(
-      'https://api.geoapify.com/v1/geocode/reverse?lat=' +
-        latLong.latitude +
-        '&lon=' +
-        latLong.longitude +
-        '&apiKey=' +
-        API_KEY,
+  async function translateLatLongToAdress(latLong: geolocationData) {
+    const translated = await axios
+      .get(
+        'https://api.geoapify.com/v1/geocode/reverse?lat=' +
+          latLong.latitude +
+          '&lon=' +
+          latLong.longitude +
+          '&apiKey=' +
+          API_KEY,
+      )
+      .then((response: any) => {
+        return response.data
+      })
+      .catch((error: any) => {
+        console.log(error)
+      })
+    return translated.features[0].properties
+  }
+
+  useEffect(() => {
+    const userAdressPromisse = getUserAdress()
+    userAdressPromisse.then(
+      (data) =>
+        data !== undefined &&
+        setFinalUserAdress({
+          city: data.city,
+          country_code: data.country_code,
+        }),
     )
-    .then((response: any) => {
-      console.log(response.data)
-    })
-    .catch((error: any) => {
-      console.log(error)
-    }) */
-}
+  }, [getUserAdress])
 
-export async function getUserAdress() {
-  const userLatLong = getUserGeolocation()
-  if (userLatLong !== undefined) {
-    const userAdress = await translateLatLongToAdress(userLatLong)
-    console.log(userAdress)
-  }
+  return (
+    <>
+      {finalUserAdress.city !== '' && finalUserAdress.country_code !== '' ? (
+        <>
+          {finalUserAdress.city}, {finalUserAdress.country_code}
+        </>
+      ) : (
+        <>Bem Vindo</>
+      )}
+    </>
+  )
 }
