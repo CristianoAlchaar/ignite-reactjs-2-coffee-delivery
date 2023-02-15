@@ -51,6 +51,7 @@ export interface CoffeeUserOrderType {
   ) => void
   handleRemoveCofeeInClientOrder: (coffeeId: number) => void
   handleMarkCurrentClientOrderAsFinished: () => void
+  handleResetOrderContext: () => void
 }
 
 export const OrderContext = createContext({} as CoffeeUserOrderType)
@@ -71,6 +72,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     handleCoffeeItemChange,
     handleRemoveCofeeInClientOrder,
     handleMarkCurrentClientOrderAsFinished,
+    handleResetOrderContext,
   }
 
   const [orderState, dispatch] = useReducer(orderReducer, initialOrderState)
@@ -113,6 +115,10 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     dispatch(markCurrentOrderAsFinished())
   }
 
+  function handleResetOrderContext() {
+    dispatch({ type: 'RESET_ORDER_CONTEXT' })
+  }
+
   return (
     <OrderContext.Provider
       value={{
@@ -126,6 +132,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         handleCoffeeItemChange,
         handleRemoveCofeeInClientOrder,
         handleMarkCurrentClientOrderAsFinished,
+        handleResetOrderContext,
       }}
     >
       {children}

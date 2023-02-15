@@ -58,6 +58,17 @@ export function orderReducer(
     case ActionTypes.MARK_CURRENT_ORDER_AS_FINISHED: {
       return { ...state, orderId: Date.now() }
     }
+    case ActionTypes.RESET_ORDER_CONTEXT: {
+      return {
+        ...state,
+        orderId: null,
+        coffeeItens: [],
+        deliveryAdressData: null,
+        paymentMethod: '',
+        totalPrice: 0,
+        deliveryTax: 0,
+      }
+    }
     default: {
       return state
     }

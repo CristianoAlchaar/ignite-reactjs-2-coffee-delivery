@@ -8,13 +8,19 @@ import {
 import logoCoffeeDelivery from '../../assets/CoffeeDeliveryLogo.svg'
 import { ShoppingCartSimple, MapPin } from 'phosphor-react'
 import { Link, NavLink } from 'react-router-dom'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { OrderContext } from '../../contexts/CoffeeUserOrderContext/CoffeeUserOrderContext'
 import { Geolocator } from '../Geolocator'
 
 export function Header() {
   const orderContext = useContext(OrderContext)
   const { coffeeItens } = orderContext
+  const [quantity, setQuantity] = useState(0)
+
+  useEffect(() => {
+    const qnt = coffeeItens.reduce((acc, item) => acc + item.quantity, 0)
+    setQuantity(qnt)
+  }, [coffeeItens])
 
   return (
     <HeaderContainer>
@@ -38,9 +44,7 @@ export function Header() {
           <CheckoutContainer>
             <ShoppingCartSimple size={24} color="#C47F17" weight="fill" />
           </CheckoutContainer>
-          <ListProductsCountContainer>
-            {coffeeItens.reduce((acc, item) => acc + item.quantity, 0)}
-          </ListProductsCountContainer>
+          <ListProductsCountContainer>{quantity}</ListProductsCountContainer>
         </NavLink>
       </NavContainer>
     </HeaderContainer>

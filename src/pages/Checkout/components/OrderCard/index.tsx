@@ -36,7 +36,6 @@ export function OrderCard() {
     const isReadyToSubmit = hasNonEmptyValues(orderContext)
 
     if (isReadyToSubmit) {
-      console.log(orderContext)
       navigate('/success', {
         state: {
           userAddress: orderContext.deliveryAdressData,

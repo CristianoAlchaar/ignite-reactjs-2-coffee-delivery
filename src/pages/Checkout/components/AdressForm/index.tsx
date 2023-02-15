@@ -11,7 +11,7 @@ import {
   DeliveryAddress,
   OrderContext,
 } from '../../../../contexts/CoffeeUserOrderContext/CoffeeUserOrderContext'
-import { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 
 enum formularyChange {
   CHANGE_CEP,
@@ -44,7 +44,15 @@ export function AdressForm() {
     isCityValid: false,
   })
 
-  function handleValueChange(value: string | number, change: formularyChange) {
+  const cepRef = useRef(null)
+  const houseNumberRef = useRef(null)
+  const ufRef = useRef(null)
+
+  function handleValueChange(
+    value: string | number,
+    change: formularyChange,
+    inputRef?: React.MutableRefObject<any>,
+  ) {
     switch (change) {
       case formularyChange.CHANGE_CEP:
         if (typeof value === 'string') {
@@ -53,50 +61,66 @@ export function AdressForm() {
             const updatedAddress = { ...userAddress }
             updatedAddress.CEP = value
             setUserAddress(updatedAddress)
-            if (updatedAddress.CEP.length === 8) {
+            if (updatedAddress.CEP.trim().length === 8) {
               setValidationState({ ...validationState, isCEPValid: true })
-            }
+            } else setValidationState({ ...validationState, isCEPValid: false })
           } else if (value.length !== 0) {
             alert(
               'O CEP deve ser composto apenas por números e ter oito caractéres.',
             )
+            if (inputRef !== undefined) {
+              inputRef.current.value = ''
+            }
           }
         }
         break
       case formularyChange.CHANGE_DISTRICT:
         if (typeof value === 'string') {
-          if (value.length < 31) {
+          if (value.length < 31 && value.trim().length > 0) {
             const updatedAddress = { ...userAddress }
             updatedAddress.district = value
             setUserAddress(updatedAddress)
             setValidationState({ ...validationState, isDistrictValid: true })
           } else {
-            alert('O bairro deve ter no máximo 30 caractéres')
+            alert('O bairro deve ser preenchido e ter no máximo 30 caractéres')
+            setValidationState({ ...validationState, isDistrictValid: false })
           }
         }
         break
       case formularyChange.CHANGE_HOUSE_NUMBER:
-        if (typeof value === 'number') {
+        if (typeof value === 'string') {
           const regex = /^[1-9]{1,5}$/
-          if (regex.test(value.toString())) {
+          if (regex.test(value)) {
             const updatedAddress = { ...userAddress }
-            updatedAddress.houseNumber = value
+            updatedAddress.houseNumber = Number(value)
             setUserAddress(updatedAddress)
             setValidationState({ ...validationState, isHouseNUmberValid: true })
-          } else {
-            alert('O número da casa deve ser entre 0 e 99999')
+          } else if (value.length !== 0) {
+            alert(
+              'O número da casa deve preenchido ser entre 0(sem nº) e 99999',
+            )
+            setValidationState({
+              ...validationState,
+              isHouseNUmberValid: false,
+            })
+            if (inputRef !== undefined) {
+              inputRef.current.value = ''
+            }
           }
         }
         break
       case formularyChange.CHANGE_STREET:
         if (typeof value === 'string') {
-          if (value.length < 51) {
+          if (value.length < 51 && value.trim().length > 0) {
             const updatedAddress = { ...userAddress }
             updatedAddress.street = value
             setUserAddress(updatedAddress)
             setValidationState({ ...validationState, isStreetValid: true })
           } else {
-            alert('O endereço da rua deve ter no máximo 50 caractéres')
+            alert(
+              'O endereço da rua deve ser preenchido e ter no máximo 50 caractéres',
+            )
+            setValidationState({ ...validationState, isStreetValid: false })
           }
         }
         break
@@ -109,26 +133,32 @@ export function AdressForm() {
         break
       case formularyChange.CHANGE_CITY:
         if (typeof value === 'string') {
-          if (value.length < 31) {
+          if (value.length < 31 && value.trim().length > 0) {
             const updatedAddress = { ...userAddress }
             updatedAddress.city = value
             setUserAddress(updatedAddress)
             setValidationState({ ...validationState, isCityValid: true })
           } else {
-            alert('A cidade deve ter no máximo 30 caractéres')
+            setValidationState({ ...validationState, isCityValid: false })
+            alert('A cidade deve ser preenchida e ter no máximo 30 caractéres')
           }
         }
         break
       case formularyChange.CHANGE_UF:
         if (typeof value === 'string') {
-          if (value.length === 2) {
+          if (value.trim().length === 2 && /^[a-zA-Z]+$/.test(value)) {
+            console.log('entrei if')
             const valueUpperCase = value.toUpperCase()
             const updatedAddress = { ...userAddress }
             updatedAddress.UF = valueUpperCase
             setUserAddress(updatedAddress)
             setValidationState({ ...validationState, isUFValid: true })
-          } else if (value.length > 2) {
+          } else if (value.length === 2) {
+            setValidationState({ ...validationState, isUFValid: false })
             alert('Entre com um UF válido')
+            if (inputRef !== undefined) {
+              inputRef.current.value = ''
+            }
           }
         }
         break
@@ -155,11 +185,19 @@ export function AdressForm() {
       </header>
       <input
         type="text"
+        ref={cepRef}
         placeholder="CEP"
+        inputMode="numeric"
+        pattern="\d*"
+        max={9999999}
         maxLength={8}
         required
         onChange={(event) =>
-          handleValueChange(event.target.value, formularyChange.CHANGE_CEP)
+          handleValueChange(
+            event.target.value,
+            formularyChange.CHANGE_CEP,
+            cepRef,
+          )
         }
       />
       <FormLine>
@@ -175,23 +213,20 @@ export function AdressForm() {
       </FormLine>
       <FormLine>
         <input
-          type="number"
+          type="text"
+          ref={houseNumberRef}
           placeholder="Nº casa"
           min={0}
           max={99999}
           maxLength={5}
           required
-          onChange={(event) => {
-            const numberValue = Number(event.target.value)
-            if (isNaN(numberValue)) {
-              alert(alert('O número da casa deve ser entre 0 e 99999'))
-            } else {
-              handleValueChange(
-                numberValue,
-                formularyChange.CHANGE_HOUSE_NUMBER,
-              )
-            }
-          }}
+          onChange={(event) =>
+            handleValueChange(
+              event.target.value,
+              formularyChange.CHANGE_HOUSE_NUMBER,
+              houseNumberRef,
+            )
+          }
         />
         <ComplementInput
           type="text"
@@ -231,10 +266,15 @@ export function AdressForm() {
         <StateInput
           type="text"
           placeholder="UF"
+          ref={ufRef}
           required
           maxLength={2}
           onChange={(event) =>
-            handleValueChange(event.target.value, formularyChange.CHANGE_UF)
+            handleValueChange(
+              event.target.value,
+              formularyChange.CHANGE_UF,
+              ufRef,
+            )
           }
         />
       </FormLine>

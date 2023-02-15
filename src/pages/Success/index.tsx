@@ -1,11 +1,16 @@
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
+import { useContext, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import deliverIllustration from '../../assets/deliverIllustration.svg'
+import { OrderContext } from '../../contexts/CoffeeUserOrderContext/CoffeeUserOrderContext'
 import { SuccessContainer, MapIcon, TimerIcon, CurrencyIcon } from './style'
 
 export function Success() {
   const location = useLocation()
-
+  const orderContext = useContext(OrderContext)
+  useEffect(() => {
+    orderContext.handleResetOrderContext()
+  }, [])
   return (
     <SuccessContainer>
       <div>

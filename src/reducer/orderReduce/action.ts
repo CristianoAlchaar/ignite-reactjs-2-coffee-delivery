@@ -6,6 +6,7 @@ export enum ActionTypes {
   REMOVE_COFFEE = 'REMOVE_COFFEE',
   MARK_CURRENT_ORDER_AS_FINISHED = 'MARK_CURRENT_ORDER_AS_FINISHED',
   ALTER_COFFEE_BY_ID = 'ALTER_COFFEE_BY_ID',
+  RESET_ORDER_CONTEXT = 'RESET_ORDER_CONTEXT',
 }
 
 interface AddNewCoffeeAction {
@@ -35,11 +36,16 @@ interface MarkCurrentOrderAsFinishedAction {
   type: ActionTypes.MARK_CURRENT_ORDER_AS_FINISHED
 }
 
+interface ResetOrderContext {
+  type: ActionTypes.RESET_ORDER_CONTEXT
+}
+
 export type Action =
   | AddNewCoffeeAction
   | AlterCoffeeItemById
   | RemoveCoffeeAction
   | MarkCurrentOrderAsFinishedAction
+  | ResetOrderContext
 
 export function addNewCoffee(coffee: coffeeItem, quantity: number) {
   return {
@@ -76,5 +82,11 @@ export function removeCofee(coffeeId: number) {
 export function markCurrentOrderAsFinished() {
   return {
     type: ActionTypes.MARK_CURRENT_ORDER_AS_FINISHED,
+  }
+}
+
+export function resetOrderContext() {
+  return {
+    type: ActionTypes.RESET_ORDER_CONTEXT,
   }
 }
