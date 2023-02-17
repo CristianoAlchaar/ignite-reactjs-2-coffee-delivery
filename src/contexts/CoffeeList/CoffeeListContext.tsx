@@ -2,8 +2,8 @@ import { createContext } from 'react'
 import imgExpresso from './../../assets/Expresso.svg'
 import imgAmericano from './../../assets/Americano.svg'
 import imgExpressoCremoso from './../../assets/ExpressoCremoso.svg'
-import imgCaféGelado from './../../assets/CafeGelado.svg'
-import imgCafécomLeite from './../../assets/CafecomLeite.svg'
+import imgCafeGelado from './../../assets/CafeGelado.svg'
+import imgCafecomLeite from './../../assets/CafeComLeite.svg'
 import imgLatte from './../../assets/Latte.svg'
 import imgCapuccino from './../../assets/Capuccino.svg'
 import imgMacchiato from './../../assets/Macchiato.svg'
@@ -58,7 +58,7 @@ const CoffeeList: coffeeItem[] = [
   },
   {
     id: 4,
-    imgPath: imgCaféGelado,
+    imgPath: imgCafeGelado,
     title: 'Expresso Gelado',
     tags: [coffeeTags.traditional, coffeeTags.cold],
     description: 'Bebida preparada com café expresso e cubos de gelo',
@@ -66,7 +66,7 @@ const CoffeeList: coffeeItem[] = [
   },
   {
     id: 5,
-    imgPath: imgCafécomLeite,
+    imgPath: imgCafecomLeite,
     title: 'Café com Leite',
     tags: [coffeeTags.traditional, coffeeTags.milky],
     description: 'Meio a meio de expresso tradicional com leite vaporizado',

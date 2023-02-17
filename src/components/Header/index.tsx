@@ -5,7 +5,7 @@ import {
   NavContainer,
   ListProductsCountContainer,
 } from './style'
-import logoCoffeeDelivery from '../../assets/CoffeeDeliveryLogo.svg'
+import logoCoffeeDelivery from './../../assets/CoffeeDeliveryLogo.svg'
 import { ShoppingCartSimple, MapPin } from 'phosphor-react'
 import { Link, NavLink } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
