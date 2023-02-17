@@ -72,7 +72,6 @@ export function Geolocator() {
           country_code: data.country_code,
         }),
     )
-    console.log(finalUserAdress)
   }, [getUserAdress])
 
   return (

@@ -147,7 +147,6 @@ export function AdressForm() {
       case formularyChange.CHANGE_UF:
         if (typeof value === 'string') {
           if (value.trim().length === 2 && /^[a-zA-Z]+$/.test(value)) {
-            console.log('entrei if')
             const valueUpperCase = value.toUpperCase()
             const updatedAddress = { ...userAddress }
             updatedAddress.UF = valueUpperCase
