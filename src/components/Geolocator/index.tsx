@@ -12,7 +12,7 @@ interface necessaryUserAdressData {
   country_code: string
 }
 
-const API_KEY = 'a5892da8fbec4d9c8ce4d009bb389a87'
+const API_KEY = process.env.GEOAPI_KEY
 
 export function Geolocator() {
   const [finalUserAdress, setFinalUserAdress] =
