@@ -13,7 +13,7 @@ interface necessaryUserAdressData {
 }
 
 // API_KEY HERE
-const API_KEY = import.meta.env.VITE_GEOAPI_KEY
+const API_KEY = process.env.REACT_APP_GEOAPI_KEY
 
 export function Geolocator() {
   const [finalUserAdress, setFinalUserAdress] =
