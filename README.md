@@ -18,6 +18,9 @@ This project was created with the following technologies:
 - User location is taken using Axios to make an API call to Geoapify.
 - Basic form control is included.
 
+## Demo
+
+You can see a live demo of this project at [https://ignite-reactjs-2-coffee-delivery.vercel.app](https://ignite-reactjs-2-coffee-delivery.vercel.app). 
 ## How to Run the Project
 
 1. Clone this repository.
